@@ -1,6 +1,8 @@
 # 2D-bouncing
 Simple 2D dataset of bouncing balls
 
+![](example.gif)
+
 ## Initial proof-of-concept
 
 - [x] White circle on black background
