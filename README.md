@@ -3,6 +3,18 @@ Simple 2D dataset of bouncing balls
 
 ![](example.gif)
 
+Made of 3 components:
+
+1. Script which generates a dataset of unique simulation parameters
+
+2. Script which takes in the simulation parameters (radius,speed,initial position), and calculates the position of the ball at each timestep
+
+4. Script which takes the position and draws the ball as an image
+
+    E.g. `./drawCircle.sh 10 50 frame_0.png` will draw a circle at (10,50)
+
+
+
 ## Initial proof-of-concept
 
 - [x] White circle on black background
@@ -15,9 +27,3 @@ Simple 2D dataset of bouncing balls
     - [ ] Gravity
     - [ ] Ball mass
     - etc
-
-Made of 2 components:
-1. Script which takes in the simulation parameters (radius,speed,initial position), and calculates the position of the ball at each timestep
-2. Script which takes the position and draws the ball as an image
-
-    E.g. `./drawCircle.sh 10 50 frame_0.png` will draw a circle at (10,50)
