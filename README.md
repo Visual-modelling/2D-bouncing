@@ -3,6 +3,27 @@ Simple 2D dataset of bouncing balls
 
 ![](example.gif)
 
+## Usage
+`WIP`
+
+To generate a dataset of N videos, run:
+`generate_dataset.py N my_dataset_name`
+
+This will create a directory `my_dataset_name` with a directory per simulation:
+```
+.
+└── my_dataset_name
+    ├── sequence_000
+    │   ├── config.yaml
+    │   ├── frame_000.png
+    │   ...
+    │   └── frame_100.png
+    ....
+    └── sequence_N
+        └── ...
+```
+
+Each sequence contains a `config.yaml` file recording the simulation parameters.
 
 ## Components
 Made of 3 components:
