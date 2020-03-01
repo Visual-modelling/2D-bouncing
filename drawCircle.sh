@@ -3,7 +3,7 @@
 
 ########################
 # Get arguments
-usage() { echo "Usage: $0 [-r <radius>] X Y FILENAME" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-r <radius>] X Y  FILENAME" 1>&2; exit 1; }
 
 radius=10 # default radius
 image_size=100
