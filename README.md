@@ -5,7 +5,7 @@ Simple 2D dataset of bouncing balls
 
 ## Requirements
 
-Install the python dependancies (`pip install -r requirements.txt`) and [imagemagik](https://www.archlinux.org/packages/?name=imagemagick)
+Install the python dependancies (`pip install -r requirements.txt`) and [imagemagick](https://www.archlinux.org/packages/?name=imagemagick)
 
 ## Usage
 
@@ -39,6 +39,8 @@ Made of 3 components:
 4. Script which takes the position and draws the ball as an image
 
     E.g. `./drawCircle.sh 10 50 frame_0.png` will draw a circle at (10,50)
+    
+    (images are 100x100)
 
 
 ## Initial proof-of-concept
