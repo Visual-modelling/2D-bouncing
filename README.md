@@ -11,7 +11,7 @@ Install the python dependancies (`pip install -r requirements.txt`) and [imagema
 
 To generate a dataset of N videos, run:
 
-`python generate_dataset.py N my_dataset_name`
+`python src/generate_dataset.py N my_dataset_name`
 
 This will create a directory `my_dataset_name` with a directory per simulation:
 ```
