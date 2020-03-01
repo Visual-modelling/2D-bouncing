@@ -14,8 +14,14 @@ from sklearn.model_selection._search import ParameterSampler
 
 from simpleOneBall import simulate
 
-output_dir = "output"
-num_simulations = 10
+import argparse
+parser = argparse.ArgumentParser(description='Generate ball simulations')
+parser.add_argument('number_of_simulations', metavar='NUM_SIMS', type=int,
+                    help='Number of simulations to run')
+parser.add_argument('output_path', metavar='OUTPUT_NAME', type=str,
+                    help='Path to save simulations')
+args = parser.parse_args()
+
 num_timesteps_per_simulation = 100
 
 parameter_space = {
@@ -31,7 +37,7 @@ parameter_space = {
 # Loop through param space
 # Run simulate gen
 # Render
-for i,params in enumerate(ParameterSampler(parameter_space,num_simulations)):
+for i,params in enumerate(ParameterSampler(parameter_space,args.number_of_simulations)):
 
 
     # Scale X,Y in range radius - 1-radius
@@ -44,8 +50,8 @@ for i,params in enumerate(ParameterSampler(parameter_space,num_simulations)):
     timesteps = simulate(num_timesteps_per_simulation,**params)
 
     # Make directory
-    formatted_name = "0"*(len(str(num_simulations))-len(str(i)))+str(i)
-    formatted_name = os.path.join(output_dir,formatted_name)
+    formatted_name = "0"*(len(str(args.number_of_simulations))-len(str(i)))+str(i)
+    formatted_name = os.path.join(args.output_path,formatted_name)
     os.mkdir(formatted_name)
 
     for t in timesteps:

@@ -4,34 +4,6 @@ import argparse
 num_time_steps = 50
 dt = 0.1
 
-parser = argparse.ArgumentParser(description='Calculate the positions of a ball')
-parser.add_argument('--x', metavar='X', type=int,
-                    default=0.5,
-                    help='Starting X coordinate of the ball. Must be between 0-1.')
-parser.add_argument('--y', metavar='Y', type=int, 
-                    default=0.5,
-                    help='Starting Y coordinate of the ball. Must be between 0-1.')
-parser.add_argument('--dx', metavar='DX', type=int,
-                    default=0,
-                    help='Starting X-component of velocity')
-parser.add_argument('--dy', metavar='DY', type=int, 
-                    default=0,
-                    help='Starting Y-component of velocity')
-parser.add_argument('--radius', metavar='R', type=int,
-                    default=0.1,
-                    help='Radius of the ball')
-
-# Change mass is equiv to change in G for a single ball
-#parser.add_argument('--mass', metavar='M', type=int,
-#                        default=1
-#                        help='Mass of the ball')
-parser.add_argument('--gravity_x', metavar='GX', type=int,
-                    default=0,
-                    help='X-component of gravitational force')
-parser.add_argument('--gravity_y', metavar='GY', type=int,
-                    default=0.1,
-                    help='Y-component of gravitational force')
-args = parser.parse_args()
 
 
 
@@ -70,6 +42,37 @@ def simulate(num_time_steps,radius=0.1,x=0.5, y=0.5, dx=0, dy=0, gx=0, gy=0.1):
     return simulation_output
 
 if __name__ == "__main__":
+
+
+    parser = argparse.ArgumentParser(description='Calculate the positions of a ball')
+    parser.add_argument('--x', metavar='X', type=int,
+                        default=0.5,
+                        help='Starting X coordinate of the ball. Must be between 0-1.')
+    parser.add_argument('--y', metavar='Y', type=int, 
+                        default=0.5,
+                        help='Starting Y coordinate of the ball. Must be between 0-1.')
+    parser.add_argument('--dx', metavar='DX', type=int,
+                        default=0,
+                        help='Starting X-component of velocity')
+    parser.add_argument('--dy', metavar='DY', type=int, 
+                        default=0,
+                        help='Starting Y-component of velocity')
+    parser.add_argument('--radius', metavar='R', type=int,
+                        default=0.1,
+                        help='Radius of the ball')
+
+    # Change mass is equiv to change in G for a single ball
+    #parser.add_argument('--mass', metavar='M', type=int,
+    #                        default=1
+    #                        help='Mass of the ball')
+    parser.add_argument('--gravity_x', metavar='GX', type=int,
+                        default=0,
+                        help='X-component of gravitational force')
+    parser.add_argument('--gravity_y', metavar='GY', type=int,
+                        default=0.1,
+                        help='Y-component of gravitational force')
+    args = parser.parse_args()
+
     output = simulate(10,args.radius,args.x,args.y,args.dx,args.dy,args.gravity_x,args.gravity_y)
     for o in output:
         print("\t".join([str(v) for v in o]))
