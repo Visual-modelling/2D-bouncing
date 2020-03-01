@@ -12,7 +12,7 @@ import time
 import os
 from sklearn.model_selection._search import ParameterSampler
 
-from simpleOneBall import simulate
+from simulate import simulate
 
 import argparse
 parser = argparse.ArgumentParser(description='Generate ball simulations')
