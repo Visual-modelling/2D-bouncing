@@ -3,23 +3,27 @@ Simple 2D dataset of bouncing balls
 
 ![](example.gif)
 
+## Requirements
+
+Install the python dependancies (`pip install -r requirements.txt`) and [imagemagik](https://www.archlinux.org/packages/?name=imagemagick)
+
 ## Usage
-`WIP`
 
 To generate a dataset of N videos, run:
-`generate_dataset.py N my_dataset_name`
+
+`python generate_dataset.py N my_dataset_name`
 
 This will create a directory `my_dataset_name` with a directory per simulation:
 ```
 .
 └── my_dataset_name
-    ├── sequence_000
+    ├── 000
     │   ├── config.yaml
     │   ├── frame_000.png
     │   ...
     │   └── frame_100.png
     ....
-    └── sequence_N
+    └── N
         └── ...
 ```
 
@@ -40,12 +44,12 @@ Made of 3 components:
 ## Initial proof-of-concept
 
 - [x] White circle on black background
-- [ ] Ball bounces off image edges
+- [x] Ball bounces off image edges
 - [ ] Vary physical properties:
-    - [ ] Starting position
-    - [ ] Ball radius
-    - [ ] Initial direction
-    - [ ] Initial speed
-    - [ ] Gravity
+    - [x] Starting position
+    - [x] Ball radius
+    - [x] Initial direction
+    - [x] Initial speed
+    - [x] Gravity
     - [ ] Ball mass
     - etc
