@@ -3,6 +3,10 @@ Simple 2D dataset of bouncing balls
 
 ![](example.gif)
 
+## Requirements
+
+Install the python dependancies (`pip install -r requirements.txt`) and [imagemagik](https://www.archlinux.org/packages/?name=imagemagick)
+
 ## Usage
 
 To generate a dataset of N videos, run:
