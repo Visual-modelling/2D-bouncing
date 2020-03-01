@@ -59,7 +59,7 @@ for i,params in enumerate(ParameterSampler(parameter_space,args.number_of_simula
         os.system("./drawCircle.sh -r"+str(int(params["radius"]*100))+" "+str(round(t[1]*100))+" "+str(round(t[2]*100))+" "+os.path.join(formatted_name,"frame_"+"{:02d}".format(t[0])+".png"))
 
     # Add metadata
-    with open(os.path.join(formatted_name,"params.yml"),'w') as f:
+    with open(os.path.join(formatted_name,"config.yml"),'w') as f:
         params["date"] = time.time()
         yaml.dump(params,f)
 
