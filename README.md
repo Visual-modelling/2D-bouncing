@@ -5,13 +5,13 @@ Simple 2D dataset of bouncing balls
 
 ## Requirements
 
-Install the python dependancies (`pip install -r requirements.txt`) and [imagemagik](https://www.archlinux.org/packages/?name=imagemagick)
+Install the python dependancies (`pip install -r requirements.txt`) and [imagemagick](https://www.archlinux.org/packages/?name=imagemagick)
 
 ## Usage
 
 To generate a dataset of N videos, run:
 
-`python generate_dataset.py N my_dataset_name`
+`python src/generate_dataset.py N my_dataset_name`
 
 This will create a directory `my_dataset_name` with a directory per simulation:
 ```
@@ -39,6 +39,8 @@ Made of 3 components:
 4. Script which takes the position and draws the ball as an image
 
     E.g. `./drawCircle.sh 10 50 frame_0.png` will draw a circle at (10,50)
+    
+    (images are 100x100)
 
 
 ## Initial proof-of-concept
