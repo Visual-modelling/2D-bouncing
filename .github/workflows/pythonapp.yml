@@ -1,4 +1,4 @@
-name: Python application
+name: 2D-bouncing
 
 on: [push]
 
