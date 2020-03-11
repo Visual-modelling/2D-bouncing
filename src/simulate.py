@@ -77,7 +77,7 @@ if __name__ == "__main__":
                         help='Y-component of gravitational force')
     args = parser.parse_args()
 
-    output = simulate(num_time_steps,args.radius,args.x,args.y,args.dx,args.dy,args.gravity_x,args.gravity_y)
+    output = simulate(100,args.radius,args.x,args.y,args.dx,args.dy,args.gravity_x,args.gravity_y)
     for o in output:
         print("\t".join([str(v) for v in o]))
 
