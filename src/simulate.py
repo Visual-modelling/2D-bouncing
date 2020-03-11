@@ -1,17 +1,20 @@
 import os
 import argparse
 
-num_time_steps = 50
-dt = 0.1
 
 
 
-
-def simulate(num_time_steps,radius=0.1,x=0.5, y=0.5, dx=0, dy=0, gx=0, gy=0.1):
+def simulate(num_time_steps,radius=0.1,x=0.5, y=0.5, dx=0, dy=0, gx=0, gy=0):
     '''Run simulation'''
-    simulation_output = []
-    for t in range(0,num_time_steps):
 
+
+    dt = 0.0001
+    output_every = 1000
+
+    simulation_output = []
+    t = 0
+    while len(simulation_output) < num_time_steps:
+        t += 1
         # Calc force
         fx = gx# * args.mass
         fy = gy# * args.mass
@@ -25,39 +28,40 @@ def simulate(num_time_steps,radius=0.1,x=0.5, y=0.5, dx=0, dy=0, gx=0, gy=0.1):
         y += dy * dt
 
         # Wall collisions
-        if (x < radius):
+        if (x <= radius):
             x = radius
             dx *= -1
-        elif (x > 1-radius):
+        elif (x >= 1-radius):
             x = 1-radius
             dx *= -1
-        if (y < radius):
+        if (y <= radius):
             y = radius
             dy *= -1
-        elif (y > 1-radius):
+        elif (y >= 1-radius):
             y = 1-radius
             dy *= -1
 
-        simulation_output.append((t,x,y))
+        if t % output_every == 0:
+            simulation_output.append((len(simulation_output),x,y))
     return simulation_output
 
 if __name__ == "__main__":
 
 
     parser = argparse.ArgumentParser(description='Calculate the positions of a ball')
-    parser.add_argument('--x', metavar='X', type=int,
+    parser.add_argument('--x', metavar='X', type=float,
                         default=0.5,
                         help='Starting X coordinate of the ball. Must be between 0-1.')
-    parser.add_argument('--y', metavar='Y', type=int, 
+    parser.add_argument('--y', metavar='Y', type=float,
                         default=0.5,
                         help='Starting Y coordinate of the ball. Must be between 0-1.')
-    parser.add_argument('--dx', metavar='DX', type=int,
+    parser.add_argument('--dx', metavar='DX', type=float,
                         default=0,
                         help='Starting X-component of velocity')
-    parser.add_argument('--dy', metavar='DY', type=int, 
+    parser.add_argument('--dy', metavar='DY', type=float,
                         default=0,
                         help='Starting Y-component of velocity')
-    parser.add_argument('--radius', metavar='R', type=int,
+    parser.add_argument('--radius', metavar='R', type=float,
                         default=0.1,
                         help='Radius of the ball')
 
@@ -65,15 +69,15 @@ if __name__ == "__main__":
     #parser.add_argument('--mass', metavar='M', type=int,
     #                        default=1
     #                        help='Mass of the ball')
-    parser.add_argument('--gravity_x', metavar='GX', type=int,
+    parser.add_argument('--gravity_x', metavar='GX', type=float,
                         default=0,
                         help='X-component of gravitational force')
-    parser.add_argument('--gravity_y', metavar='GY', type=int,
-                        default=0.1,
+    parser.add_argument('--gravity_y', metavar='GY', type=float,
+                        default=0,
                         help='Y-component of gravitational force')
     args = parser.parse_args()
 
-    output = simulate(10,args.radius,args.x,args.y,args.dx,args.dy,args.gravity_x,args.gravity_y)
+    output = simulate(num_time_steps,args.radius,args.x,args.y,args.dx,args.dy,args.gravity_x,args.gravity_y)
     for o in output:
         print("\t".join([str(v) for v in o]))
 
