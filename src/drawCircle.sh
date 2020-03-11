@@ -6,7 +6,7 @@
 usage() { echo "Usage: $0 [-r <radius>] X Y  FILENAME" 1>&2; exit 1; }
 
 radius=10 # default radius
-image_size=100
+image_size=64
 
 while getopts "r:" flag; do
 case "$flag" in

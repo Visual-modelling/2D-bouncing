@@ -23,6 +23,7 @@ parser.add_argument('output_path', metavar='OUTPUT_NAME', type=str,
 args = parser.parse_args()
 
 num_timesteps_per_simulation = 100
+image_size = 64
 
 parameter_space = {
     "x":[0.1*i for i in range(1,10)],
@@ -56,7 +57,7 @@ for i,params in enumerate(ParameterSampler(parameter_space,args.number_of_simula
 
     for t in timesteps:
         # Render the images
-        os.system("./drawCircle.sh -r"+str(int(params["radius"]*100))+" "+str(round(t[1]*100))+" "+str(round(t[2]*100))+" "+os.path.join(formatted_name,"frame_"+"{:02d}".format(t[0])+".png"))
+            os.system(os.path.join(os.path.dirname(__file__),"drawCircle.sh")+" -r"+str(int(params["radius"]*image_size))+" "+str(round(t[1]*image_size))+" "+str(round(t[2]*image_size))+" "+os.path.join(formatted_name,"frame_"+"{:03d}".format(t[0])+".png"))
 
     # Add metadata
     with open(os.path.join(formatted_name,"config.yml"),'w') as f:
