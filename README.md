@@ -17,11 +17,14 @@ This will create a directory `my_dataset_name` with a directory per simulation:
 ```
 .
 └── my_dataset_name
-    ├── 000
+    ├── config.yaml
+    ├── 0000
     │   ├── config.yaml
+    │   ├── positions.csv
     │   ├── frame_000.png
     │   ...
-    │   └── frame_100.png
+    │   ├── frame_099.png
+    │   └── simulation.gif
     ....
     └── N
         └── ...
