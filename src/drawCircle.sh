@@ -3,14 +3,19 @@
 
 ########################
 # Get arguments
-usage() { echo "Usage: $0 [-r <radius>] X Y  FILENAME" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-r <radius>] [-f <foreground_color>] [-b <background_color>] X Y FILENAME" 1>&2; exit 1; }
 
-radius=10 # default radius
+# defaults
+radius=10
+foreground=white
+background=black
 image_size=64
 
-while getopts "r:" flag; do
+while getopts "r:f:b:" flag; do
 case "$flag" in
     r) radius=$OPTARG;;
+    f) foreground=$OPTARG;;
+    b) background=$OPTARG;;
     *) usage;;
 esac
 done
@@ -26,4 +31,4 @@ fi
 ########################
 # Draw
 edge=$(($radius+$x))
-convert -size ${image_size}x${image_size} xc:black -fill white -stroke black -draw "circle $x,$y $edge,$y"  $filename
+convert -size ${image_size}x${image_size} xc:$background -fill $foreground -draw "circle $x,$y $edge,$y"  $filename
