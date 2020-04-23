@@ -1,11 +1,11 @@
 #!/bin/env sh
 #
-# Add random maskining
-
+# Add random masking to dataset
+# - Draws a random square over each frame of the dataset
 
 
 if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 DATASET" 1>&2; exit 1;
+    echo "Usage: $0 PATH_TO_DATASET" 1>&2; exit 1;
 fi
 
 cp -r $1 $1_masked
@@ -31,8 +31,3 @@ do
     done
 
 done
-
-exit
-
-
-# loop every frame
