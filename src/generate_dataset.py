@@ -93,7 +93,7 @@ for params in ParameterSampler(parameter_space,9999999,random_state=rng):
 
         for t in timesteps:
             # Render the images
-            os.system(os.path.join(os.path.dirname(__file__),"drawCircle.sh")+" -r"+str(int(params["radius"]*image_size))+" "+str(round(t[1]*image_size))+" "+str(round(t[2]*image_size))+" "+os.path.join(formatted_name,"frame_"+"{:03d}".format(t[0])+".png"))
+            os.system(os.path.join(os.path.dirname(__file__),"draw_circle.sh")+" -r"+str(int(params["radius"]*image_size))+" "+str(round(t[1]*image_size))+" "+str(round(t[2]*image_size))+" "+os.path.join(formatted_name,"frame_"+"{:03d}".format(t[0])+".png"))
 
         # Add metadata
         with open(os.path.join(formatted_name,"config.yml"),'w') as f:
