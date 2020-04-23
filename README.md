@@ -56,5 +56,8 @@ Made of 3 components:
     - [x] Initial direction
     - [x] Initial speed
     - [x] Gravity
-    - [ ] Ball mass
+    - [x] Ball and background colours
+    - [ ] Ball mass (only relevent for ball-ball collisions)
     - etc
+
+There are also utility scripts to apply random obscuring objects (`random_masking.sh`), and random blurs (`random_blurring.sh`).
