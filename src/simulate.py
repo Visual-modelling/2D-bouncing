@@ -4,7 +4,7 @@ import argparse
 
 
 
-def simulate(num_time_steps,radius=0.1,x=0.5, y=0.5, dx=0, dy=0, gx=0, gy=0):
+def simulate(num_time_steps,radius=0.1,x=0.5, y=0.5, dx=0, dy=0, gx=0, gy=0,**kwargs):
     '''Run simulation'''
 
 

@@ -34,7 +34,9 @@ parameter_space = {
     "dy":[0.1*i for i in range(-5,5)],
 #    "gx":[0.1*i for i in range(0,5)],
 #    "gy":[0.1*i for i in range(0,5)],
-    "radius":[0.1*i for i in range(1,4)]
+    "radius":[0.1*i for i in range(1,4)],
+    "background_color":['#{0:x}{0:x}{0:x}'.format(x) for x in range(0,16)],
+    "foreground_color":['#{0:x}{0:x}{0:x}'.format(x) for x in range(15,-1,-1)],
 }
 
 # Make dataset dir
@@ -57,6 +59,8 @@ with open(os.path.join(args.output_path,"config.yml"),'w') as f:
 
 
 rng = np.random.RandomState(0)
+
+
 # Loop through param space
 # Run simulate gen
 # Render
@@ -76,6 +80,8 @@ for params in ParameterSampler(parameter_space,9999999,random_state=rng):
        params["radius"] > (1-params["x"]) or \
        params["radius"] > (1-params["y"]):
         print("Too close!")
+    elif params["background_color"] == params["foreground_color"]:
+        print("Colors match!")
     else:
 
         # Simulate
@@ -93,7 +99,13 @@ for params in ParameterSampler(parameter_space,9999999,random_state=rng):
 
         for t in timesteps:
             # Render the images
-            os.system(os.path.join(os.path.dirname(__file__),"draw_circle.sh")+" -r"+str(int(params["radius"]*image_size))+" "+str(round(t[1]*image_size))+" "+str(round(t[2]*image_size))+" "+os.path.join(formatted_name,"frame_"+"{:03d}".format(t[0])+".png"))
+            os.system(os.path.join(os.path.dirname(__file__),"draw_circle.sh")
+                    +" -r"+str(int(params["radius"]*image_size))
+                    +" -b '"+params["background_color"]+"'"
+                    +" -f '"+params["foreground_color"]+"'"
+                    +" "+str(round(t[1]*image_size))
+                    +" "+str(round(t[2]*image_size))
+                    +" "+os.path.join(formatted_name,"frame_"+"{:03d}".format(t[0])+".png"))
 
         # Add metadata
         with open(os.path.join(formatted_name,"config.yml"),'w') as f:
