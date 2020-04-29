@@ -58,6 +58,11 @@ Made of 3 components:
     - [x] Gravity
     - [x] Ball and background colours
     - [ ] Ball mass (only relevent for ball-ball collisions)
-    - etc
+    - [ ] Random ball intrensity jitter
+    - [x] Random ball colour/background color
+    - [ ] Add random ball jitter
+    - [x] Add gausian blur
+    - [ ] Add multiple balls
+
 
 There are also utility scripts to apply random obscuring objects (`random_masking.sh`), and random blurs (`random_blurring.sh`).
