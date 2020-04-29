@@ -35,7 +35,7 @@ Each sequence contains a `config.yaml` file recording the simulation parameters.
 ## Components
 Made of 3 components:
 
-1. Script which generates a dataset of unique simulation parameters
+1. Script which generates a dataset of unique simulation parameters (`generate_dataset.py`). Edit `parameter_space` to define which parameters the dataset is created over.
 
 2. Script which takes in the simulation parameters (radius,speed,initial position), and calculates the position of the ball at each timestep
 
@@ -45,6 +45,7 @@ Made of 3 components:
     
     (images are 100x100)
 
+There are also optional utility scripts to apply random obscuring objects (`random_masking.sh`), and random blurs (`random_blurring.sh`) to a generated dataset.
 
 ## Initial proof-of-concept
 
@@ -63,6 +64,3 @@ Made of 3 components:
     - [ ] Add random ball jitter
     - [x] Add gausian blur
     - [ ] Add multiple balls
-
-
-There are also utility scripts to apply random obscuring objects (`random_masking.sh`), and random blurs (`random_blurring.sh`).
