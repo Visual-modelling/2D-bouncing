@@ -57,7 +57,6 @@ There are also optional utility scripts to apply random obscuring objects (`rand
     - [x] Initial direction
     - [x] Initial speed
     - [x] Gravity
-    - [x] Ball and background colours
     - [ ] Ball mass (only relevent for ball-ball collisions)
     - [ ] Random ball intrensity jitter
     - [x] Random ball colour/background color
