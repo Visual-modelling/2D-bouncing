@@ -37,7 +37,7 @@ Made of 3 components:
 
 1. Script which generates a dataset of unique simulation parameters (`generate_dataset.py`). Edit `parameter_space` to define which parameters the dataset is created over.
 
-2. Script which takes in the simulation parameters (radius,speed,initial position), and calculates the position of the ball at each timestep
+2. Script which takes in the simulation parameters (radius,speed,initial position), and calculates the position of the ball at each timestep. (`simulate.py`)
 
 4. Script which takes the position and draws the ball as an image
 
