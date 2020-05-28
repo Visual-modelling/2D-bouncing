@@ -1,11 +1,15 @@
 import os
 import argparse
+import math
 
 
 
 
-def simulate(num_time_steps,radius=0.1,x=0.5, y=0.5, dx=0, dy=0, gx=0, gy=0,**kwargs):
+def simulate(num_time_steps,radius=[0.1],x=[0.5], y=[0.5], dx=[0.0], dy=[0.0], gx=0, gy=0,**kwargs):
     '''Run simulation'''
+
+    # Check all lists are the same length
+    assert len(x) == len(y) == len(radius) == len(dx) == len(dy), "X,Y,radius,dx,dy must be the same length"
 
 
     dt = 0.0001
@@ -15,31 +19,39 @@ def simulate(num_time_steps,radius=0.1,x=0.5, y=0.5, dx=0, dy=0, gx=0, gy=0,**kw
     t = 0
     while len(simulation_output) < num_time_steps:
         t += 1
-        # Calc force
-        fx = gx# * args.mass
-        fy = gy# * args.mass
+        for i in range(len(x)):
+            # Calc force
+            fx = gx# * args.mass
+            fy = gy# * args.mass
 
-        # Calc velocity
-        dx += fx#/args.ball_mass
-        dy += fy#/args.ball_mass
+            # Calc velocity
+            dx[i] += fx#/args.ball_mass
+            dy[i] += fy#/args.ball_mass
 
-        # Update position
-        x += dx * dt
-        y += dy * dt
+            # Update position
+            x[i] += dx[i] * dt
+            y[i] += dy[i] * dt
 
-        # Wall collisions
-        if (x <= radius):
-            x = radius
-            dx *= -1
-        elif (x >= 1-radius):
-            x = 1-radius
-            dx *= -1
-        if (y <= radius):
-            y = radius
-            dy *= -1
-        elif (y >= 1-radius):
-            y = 1-radius
-            dy *= -1
+            # Ball collisions
+            for j in range(i,len(x)):
+                distance_between_balls = math.sqrt( (x[i]-x[j])**2 + (y[i]-y[j]) **2)
+                if distance_between_balls < radius[i] + radius[j]: # if collision
+                    dx[i] = (dx[i] * ( 1 - 1) + ( 2 * 1 * dx[j])) / (1 + 1)
+                    dy[i] = (dy[i] * ( 1 - 1) + ( 2 * 1 * dy[j])) / (1 + 1)
+
+            # Wall collisions
+            if (x[i] <= radius[i]):
+                x[i] = radius[i]
+                dx *= -1
+            elif (x[i] >= 1-radius[i]):
+                x[i] = 1-radius[i]
+                dx[i] *= -1
+            if (y[i] <= radius[i]):
+                y[i] = radius[i]
+                dy[i] *= -1
+            elif (y[i] >= 1-radius[i]):
+                y[i] = 1-radius[i]
+                dy[i] *= -1
 
         if t % output_every == 0:
             simulation_output.append((len(simulation_output),x,y))
@@ -49,20 +61,20 @@ if __name__ == "__main__":
 
 
     parser = argparse.ArgumentParser(description='Calculate the positions of a ball')
-    parser.add_argument('--x', metavar='X', type=float,
-                        default=0.5,
+    parser.add_argument('--x', metavar='X', type=float,nargs="*",
+                        default=[0.5],
                         help='Starting X coordinate of the ball. Must be between 0-1.')
-    parser.add_argument('--y', metavar='Y', type=float,
-                        default=0.5,
+    parser.add_argument('--y', metavar='Y', type=float,nargs="*",
+                        default=[0.5],
                         help='Starting Y coordinate of the ball. Must be between 0-1.')
-    parser.add_argument('--dx', metavar='DX', type=float,
-                        default=0,
+    parser.add_argument('--dx', metavar='DX', type=float,nargs="*",
+                        default=[0],
                         help='Starting X-component of velocity')
-    parser.add_argument('--dy', metavar='DY', type=float,
-                        default=0,
+    parser.add_argument('--dy', metavar='DY', type=float,nargs="*",
+                        default=[0],
                         help='Starting Y-component of velocity')
-    parser.add_argument('--radius', metavar='R', type=float,
-                        default=0.1,
+    parser.add_argument('--radius', metavar='R', type=float,nargs="*",
+                        default=[0.1],
                         help='Radius of the ball')
 
     # Change mass is equiv to change in G for a single ball
