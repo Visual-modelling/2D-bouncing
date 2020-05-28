@@ -32,13 +32,19 @@ def simulate(num_time_steps,radius=[0.1],x=[0.5], y=[0.5], dx=[0.0], dy=[0.0], g
             x[i] += dx[i] * dt
             y[i] += dy[i] * dt
 
+        for i in range(len(x)):
+
             # Ball collisions
-            for j in range(0,len(x)):
+            for j in range(i,len(x)):
                 if i != j:
                     distance_between_balls = math.sqrt( (x[i]-x[j])**2 + (y[i]-y[j]) **2)
                     if distance_between_balls < radius[i] + radius[j]: # if collision
+                        dxi_temp = dx[i]
+                        dyi_temp = dy[i]
                         dx[i] = (dx[i] * ( 1 - 1) + ( 2 * 1 * dx[j])) / (1 + 1)
                         dy[i] = (dy[i] * ( 1 - 1) + ( 2 * 1 * dy[j])) / (1 + 1)
+                        dx[j] = (dx[j] * ( 1 - 1) + ( 2 * 1 * dxi_temp)) / (1 + 1)
+                        dy[j] = (dy[j] * ( 1 - 1) + ( 2 * 1 * dyi_temp)) / (1 + 1)
 
             # Wall collisions
             if (x[i] <= radius[i]):
@@ -91,11 +97,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     output = simulate(100,args.radius,args.x,args.y,args.dx,args.dy,args.gravity_x,args.gravity_y)
+    img_size = 64
     for t,o in enumerate(output):
         print("\t".join([str(v) for v in o]))
         filename = "test/frame_"+"{:02d}".format(t)+".png"
-        os.system("./draw_circle.sh "+str(round(o[1][0]*64))+" "+str(round(o[2][0]*64))+" "+filename)
-        print("./draw_circle.sh "+str(round(o[1][0]*64))+" "+str(round(o[2][0]*64))+" "+filename)
+        os.system("./draw_circle.sh -r "+str(round(args.radius[0]*img_size))+" "+str(round(o[1][0]*img_size))+" "+str(round(o[2][0]*img_size))+" "+filename)
         for i in range(1,len(o[1])):
-            os.system("./draw_circle.sh -i "+filename+" "+str(round(o[1][i]*64))+" "+str(round(o[2][i]*64))+" "+filename)
-            print("./draw_circle.sh -i "+filename+" "+str(round(o[1][i]*64))+" "+str(round(o[2][i]*64))+" "+filename)
+            os.system("./draw_circle.sh -i "+filename+" -r "+str(round(args.radius[i]*img_size))+" "+str(round(o[1][i]*img_size))+" "+str(round(o[2][i]*img_size))+" "+filename)
