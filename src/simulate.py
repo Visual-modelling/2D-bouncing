@@ -33,16 +33,17 @@ def simulate(num_time_steps,radius=[0.1],x=[0.5], y=[0.5], dx=[0.0], dy=[0.0], g
             y[i] += dy[i] * dt
 
             # Ball collisions
-            for j in range(i,len(x)):
-                distance_between_balls = math.sqrt( (x[i]-x[j])**2 + (y[i]-y[j]) **2)
-                if distance_between_balls < radius[i] + radius[j]: # if collision
-                    dx[i] = (dx[i] * ( 1 - 1) + ( 2 * 1 * dx[j])) / (1 + 1)
-                    dy[i] = (dy[i] * ( 1 - 1) + ( 2 * 1 * dy[j])) / (1 + 1)
+            for j in range(0,len(x)):
+                if i != j:
+                    distance_between_balls = math.sqrt( (x[i]-x[j])**2 + (y[i]-y[j]) **2)
+                    if distance_between_balls < radius[i] + radius[j]: # if collision
+                        dx[i] = (dx[i] * ( 1 - 1) + ( 2 * 1 * dx[j])) / (1 + 1)
+                        dy[i] = (dy[i] * ( 1 - 1) + ( 2 * 1 * dy[j])) / (1 + 1)
 
             # Wall collisions
             if (x[i] <= radius[i]):
                 x[i] = radius[i]
-                dx *= -1
+                dx[i] *= -1
             elif (x[i] >= 1-radius[i]):
                 x[i] = 1-radius[i]
                 dx[i] *= -1
@@ -54,7 +55,7 @@ def simulate(num_time_steps,radius=[0.1],x=[0.5], y=[0.5], dx=[0.0], dy=[0.0], g
                 dy[i] *= -1
 
         if t % output_every == 0:
-            simulation_output.append((len(simulation_output),x,y))
+            simulation_output.append((len(simulation_output),x.copy(),y.copy()))
     return simulation_output
 
 if __name__ == "__main__":
@@ -90,7 +91,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     output = simulate(100,args.radius,args.x,args.y,args.dx,args.dy,args.gravity_x,args.gravity_y)
-    for o in output:
+    for t,o in enumerate(output):
         print("\t".join([str(v) for v in o]))
-
-#os.system("./drawCircle.sh "+str(round(ball_x*100))+" "+str(round(ball_y*100))+" output/frame_"+"{:02d}".format(t)+".png")
+        filename = "test/frame_"+"{:02d}".format(t)+".png"
+        os.system("./draw_circle.sh "+str(round(o[1][0]*64))+" "+str(round(o[2][0]*64))+" "+filename)
+        print("./draw_circle.sh "+str(round(o[1][0]*64))+" "+str(round(o[2][0]*64))+" "+filename)
+        for i in range(1,len(o[1])):
+            os.system("./draw_circle.sh -i "+filename+" "+str(round(o[1][i]*64))+" "+str(round(o[2][i]*64))+" "+filename)
+            print("./draw_circle.sh -i "+filename+" "+str(round(o[1][i]*64))+" "+str(round(o[2][i]*64))+" "+filename)
