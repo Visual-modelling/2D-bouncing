@@ -63,7 +63,7 @@ config["githash"] = subprocess.Popen("cd {} && git log | head -n 1".format(
     stdout=subprocess.PIPE
     ).stdout.read().split()[1].decode()
 config["parameter_space"] = parameter_space
-config["per_ballparameter_space"] = per_ball_parameter_space
+config["per_ball_parameter_space"] = per_ball_parameter_space
 config["number_of_simulations"] = args.number_of_simulations
 with open(os.path.join(args.output_path,"config.yml"),'w') as f:
     yaml.dump(config,f)
@@ -93,6 +93,8 @@ for params in ParameterSampler(parameter_space,9999999,random_state=rng):
     ball_params = []
     good_simulation = True
     while len(ball_params) < params["num_balls"]:
+
+        # Check if too close to boundary
         ball_data = balls.pop()
         if ball_data["radius"] > ball_data["x"] or \
            ball_data["radius"] > ball_data["y"] or \
@@ -100,8 +102,8 @@ for params in ParameterSampler(parameter_space,9999999,random_state=rng):
            ball_data["radius"] > (1-ball_data["y"]):
             print("Rejecting: Too close to boundary!")
             continue
-        #TODO: check if too close to other balls
 
+        # Check if too close to other balls
         good_ball = True
         for existing_ball in ball_params:
             distance_between_balls = math.sqrt((ball_data["x"]-existing_ball["x"])**2 + (ball_data["y"] - existing_ball["y"]) **2)
@@ -112,6 +114,7 @@ for params in ParameterSampler(parameter_space,9999999,random_state=rng):
         if not good_ball:
             continue
 
+        # Check if ball colour same as background colour
         if params["background_color"] == ball_data["foreground_color"]:
             print("Rejecting: Colors match!")
             continue
@@ -131,6 +134,7 @@ for params in ParameterSampler(parameter_space,9999999,random_state=rng):
     formatted_name = os.path.join(args.output_path,formatted_name)
     os.mkdir(formatted_name)
 
+    # Write positions.csv file
     with open(os.path.join(formatted_name,"positions.csv"),'w') as f:
         header = "timestep,"\
             +",".join(["x"+str(i) for i in range(params["num_balls"])])+","\
@@ -146,17 +150,20 @@ for params in ParameterSampler(parameter_space,9999999,random_state=rng):
                     line += ","+str(item)
             f.write(",".join(line+"\n"))
 
+    # Render the images
     for t in timesteps:
-        # Render the images
         filename = os.path.join(formatted_name,"frame_"+"{:03d}".format(t[0])+".png")
         for j in range(len(t[1])):
             base = os.path.dirname(__file__)
             if base == "":
                 base = "./"
             cmd = os.path.join(base,"draw_circle.sh")
+
             if j == 0:
+                # First ball - pick background colour
                 cmd += " -b '"+params["background_color"]+"'"
             else:
+                # Other balls - use image of previous ball as background image
                 cmd += " -i '"+filename+"'"
 
             cmd += " -r "+str(int(params["radius"][j]*image_size))
@@ -165,11 +172,11 @@ for params in ParameterSampler(parameter_space,9999999,random_state=rng):
             cmd += " "+str(round(t[2][j]*image_size))
             cmd += " "+filename
             os.system(cmd)
+
     # Add metadata
     with open(os.path.join(formatted_name,"config.yml"),'w') as f:
         params["date"] = time.time()
         yaml.dump(params,f)
-
 
     # Just for preview - make a gif
     os.system("convert -delay 20 "+formatted_name+"/*.png "+formatted_name+"/simulation.gif")
