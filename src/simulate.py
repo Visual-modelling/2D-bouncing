@@ -96,11 +96,12 @@ if __name__ == "__main__":
                         help='Y-component of gravitational force')
     args = parser.parse_args()
 
+    # Create a test dataset
     output = simulate(100,args.radius,args.x,args.y,args.dx,args.dy,args.gravity_x,args.gravity_y)
-    img_size = 64
     for t,o in enumerate(output):
         print("\t".join([str(v) for v in o]))
-        filename = "test/frame_"+"{:02d}".format(t)+".png"
-        os.system("./draw_circle.sh -r "+str(round(args.radius[0]*img_size))+" "+str(round(o[1][0]*img_size))+" "+str(round(o[2][0]*img_size))+" "+filename)
-        for i in range(1,len(o[1])):
-            os.system("./draw_circle.sh -i "+filename+" -r "+str(round(args.radius[i]*img_size))+" "+str(round(o[1][i]*img_size))+" "+str(round(o[2][i]*img_size))+" "+filename)
+
+#         filename = "test/frame_"+"{:02d}".format(t)+".png"
+#         os.system("./draw_circle.sh -r "+str(round(args.radius[0]*img_size))+" "+str(round(o[1][0]*img_size))+" "+str(round(o[2][0]*img_size))+" "+filename)
+#         for i in range(1,len(o[1])):
+#             os.system("./draw_circle.sh -i "+filename+" -r "+str(round(args.radius[i]*img_size))+" "+str(round(o[1][i]*img_size))+" "+str(round(o[2][i]*img_size))+" "+filename)

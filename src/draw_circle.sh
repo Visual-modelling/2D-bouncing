@@ -22,7 +22,7 @@ background=black
 image_size=64
 prev_image=none
 
-while getopts "r:f:b:" flag; do
+while getopts "i:r:f:b:" flag; do
 case "$flag" in
     i) prev_image=$OPTARG;;
     r) radius=$OPTARG;;
