@@ -12,7 +12,7 @@ import time
 import os
 import math
 from sklearn.model_selection._search import ParameterSampler, ParameterGrid
-from utils import ParameterSamplerNoReset
+#from utils import ParameterSamplerNoReset
 import numpy as np
 import subprocess
 
@@ -77,7 +77,10 @@ rng = np.random.RandomState(0)
 i = 0
 balls = []
 
-# TODO: pick something more elegant
+# TODO: Find a more elegant way of doing this
+#   - Currently this just makes a large list of possible balls
+#   - This is because ParameterSampler needs to be run in a loop and the rnd number doesnt update to there is no variety
+#   - This could be fixed using a custom ParameterSampler which maintains an undated random state
 for ball in ParameterSampler(per_ball_parameter_space,max(list(parameter_space["num_balls"]))*args.number_of_simulations*10,random_state=rng):
     balls.append(ball)
 
