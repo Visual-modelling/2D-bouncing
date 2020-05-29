@@ -89,7 +89,6 @@ for params in ParameterSampler(parameter_space,9999999,random_state=rng):
 
     ball_params = []
     good_simulation = True
-    params["num_balls"] = 3
     while len(ball_params) < params["num_balls"]:
         ball_data = balls.pop()
         if ball_data["radius"] > ball_data["x"] or \
