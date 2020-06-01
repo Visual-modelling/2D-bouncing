@@ -37,13 +37,13 @@ Made of 3 components:
 
 1. Script which generates a dataset of unique simulation parameters (`generate_dataset.py`). Edit `parameter_space` to define which parameters the dataset is created over.
 
-2. Script which takes in the simulation parameters (radius,speed,initial position), and calculates the position of the ball at each timestep. (`simulate.py`)
+2. Script which takes in the simulation parameters (radius,speed,initial position, etc..), and calculates the position of the ball(s) at each timestep. (`simulate.py`)
 
-4. Script which takes the position and draws the ball as an image
+4. Script which takes the position and draws the ball(s) as an image
 
     E.g. `./drawCircle.sh 10 50 frame_0.png` will draw a circle at (10,50)
-    
-    (images are 100x100)
+
+    (images are 64x64)
 
 There are also optional utility scripts to apply random obscuring objects (`random_masking.sh`), and random blurs (`random_blurring.sh`) to a generated dataset.
 
@@ -58,8 +58,8 @@ There are also optional utility scripts to apply random obscuring objects (`rand
     - [x] Initial speed
     - [x] Gravity
     - [ ] Ball mass (only relevent for ball-ball collisions)
-    - [ ] Random ball intrensity jitter
+    - [ ] Random ball intensity jitter
     - [x] Random ball colour/background color
     - [ ] Add random ball jitter
     - [x] Add gausian blur
-    - [ ] Add multiple balls
+    - [x] Add multiple balls
