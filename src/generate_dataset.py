@@ -79,8 +79,8 @@ balls = []
 
 # TODO: Find a more elegant way of doing this
 #   - Currently this just makes a large list of possible balls
-#   - This is because ParameterSampler needs to be run in a loop and the rnd number doesnt update to there is no variety
-#   - This could be fixed using a custom ParameterSampler which maintains an undated random state
+#   - This is because ParameterSampler needs to be run in a loop and the rnd state doesn't update to there is no variety
+#   - This could be fixed using a custom ParameterSampler which maintains an updated random state
 for ball in ParameterSampler(per_ball_parameter_space,max(list(parameter_space["num_balls"]))*args.number_of_simulations*10,random_state=rng):
     balls.append(ball)
 
