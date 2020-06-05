@@ -143,16 +143,15 @@ while simulation_num < args.number_of_simulations:
             header = "timestep,"\
                 +",".join(["x"+str(i) for i in range(params["num_balls"])])+","\
                 +",".join(["y"+str(i) for i in range(params["num_balls"])])
-
             f.write(header+"\n")
             for t in timesteps:
-                line = ""
+                line = []
                 for item in t:
                     if isinstance(item,list):
-                        line += ","+",".join([str(it) for it in item])
+                        line += [",".join([str(it) for it in item])]
                     else:
-                        line += ","+str(item)
-                f.write(",".join(line+"\n"))
+                        line += [str(item)]
+                f.write(",".join(line)+"\n")
 
         # Render the images
         for t in timesteps:
