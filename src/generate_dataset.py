@@ -113,7 +113,7 @@ sampler_idx = 0
 
 
 while simulation_num < args.number_of_simulations:
-    if(sampler_idx == args.number_of_simulations):
+    if(sampler_idx == min(1000, args.number_of_simulations)):
         sampler_idx = 0
         sampler = list(ParameterSampler(parameter_space, min(1000, args.number_of_simulations)))
     params = sampler[sampler_idx]
