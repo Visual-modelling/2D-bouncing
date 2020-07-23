@@ -40,7 +40,7 @@ per_ball_parameter_space = {
 
 # Global parameters
 parameter_space = {
-    "num_balls":range(1,4),
+    "num_balls":[1],
 #    "gx":[0.1*i for i in range(0,5)],
 #    "gy":[0.1*i for i in range(0,5)],
     "background_color":['#{0:x}{0:x}{0:x}'.format(x) for x in range(0,16)],
@@ -160,8 +160,13 @@ while simulation_num < args.number_of_simulations:
                 base = os.path.dirname(__file__)
                 if base == "":
                     base = "./"
-                cmd = os.path.join(base,"draw_circle.sh")
+                cmd = "blender -b '"+os.path.join(base, "base.blend")+"' -P "+os.path.join(base, "blend.py")+" --"
+                cmd += " -r "+str(params["radius"][j])
+                cmd += " "+str(t[1][j])
+                cmd += " "+str(t[2][j])
+                cmd += " "+filename[:-4]
 
+                '''
                 if j == 0:
                     # First ball - pick background colour
                     cmd += " -b '"+params["background_color"]+"'"
@@ -174,6 +179,7 @@ while simulation_num < args.number_of_simulations:
                 cmd += " "+str(round(t[1][j]*image_size))
                 cmd += " "+str(round(t[2][j]*image_size))
                 cmd += " "+filename
+                '''
                 os.system(cmd)
 
         # Add metadata
