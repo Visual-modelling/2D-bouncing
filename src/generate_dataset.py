@@ -162,6 +162,7 @@ while simulation_num < args.number_of_simulations:
                     base = "./"
                 cmd = "blender -b '"+os.path.join(base, "base.blend")+"' -P "+os.path.join(base, "blend.py")+" --"
                 cmd += " -r "+str(params["radius"][j])
+                cmd += " -fg \""+ params["foreground_color"][j]+"\""
                 cmd += " "+str(t[1][j])
                 cmd += " "+str(t[2][j])
                 cmd += " "+filename[:-4]
