@@ -68,8 +68,8 @@ def setMaterial(ob, mat):
 scene = bpy.data.scenes["Scene"]
 
 # Set render resolution
-scene.render.resolution_x = 480
-scene.render.resolution_y = 359
+scene.render.resolution_x = 64
+scene.render.resolution_y = 64
 
 # Set camera fov in degrees
 scene.camera.data.angle = fov*(pi/180.0)
@@ -81,9 +81,13 @@ scene.camera.rotation_euler[1] = 0.0*(pi/180.0)
 scene.camera.rotation_euler[2] = 46.7*(pi/180.0)
 
 # Set camera translation
-scene.camera.location.x = 3.55889
-scene.camera.location.y = -2.50579
-scene.camera.location.z = 2.51831
+# scene.camera.location.x = 3.55889
+# scene.camera.location.y = -2.50579
+# scene.camera.location.z = 2.51831
+
+scene.camera.location.x = 2.0
+scene.camera.location.y = -0.9558
+scene.camera.location.z = 1.4083
 
 red = makeMaterial('mat1',args.foreground_color,(1,1,1))
 bpy.ops.mesh.primitive_uv_sphere_add(location=(args.X,args.Y,0.5), radius=args.radius)
