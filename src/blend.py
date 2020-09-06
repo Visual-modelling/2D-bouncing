@@ -27,6 +27,8 @@ parser.add_argument("Y", type=float, default=0,
                     help="y position of ball")
 parser.add_argument("filename", type=str, default=0,
                     help="filename of output")
+parser.add_argument("--segmentation_map", action="store_true",
+                    help="Render a segmentation map")
 args = parser.parse_args()
 
 pi = 3.14159265
@@ -89,16 +91,35 @@ scene.camera.location.x = 2.0
 scene.camera.location.y = -0.9558
 scene.camera.location.z = 1.4083
 
-red = makeMaterial('mat1',args.foreground_color,(1,1,1))
 bpy.ops.mesh.primitive_uv_sphere_add(location=(args.X,args.Y,0.5), radius=args.radius)
-setMaterial(bpy.context.object, red)
+
+ball_col = makeMaterial('mat1',args.foreground_color,(1,1,1))
+setMaterial(bpy.context.object, ball_col)
 
 # Enable GPUs
 bpy.context.scene.cycles.device = 'GPU'
 bpy.ops.render.render(True)
 # TODO: Does this work?
 
+if args.segmentation_map:
+    # Remove the cube
+    bpy.ops.object.select_all(action='DESELECT')
+    bpy.data.objects['Cube'].select_set(True)
+    bpy.ops.object.delete()
+
+    # Render with transparent background
+    bpy.context.scene.render.film_transparent = True
+    bpy.context.scene.render.image_settings.color_mode = 'RGBA'
 
 # Render Scene and store the scene
-bpy.data.scenes["Scene"].render.filepath = args.filename
+render_filename = args.filename
+if args.segmentation_map:
+    render_filename = render_filename + "_tmp"
+bpy.data.scenes["Scene"].render.filepath = render_filename
 bpy.ops.render.render( write_still=True )
+
+if args.segmentation_map:
+    # Convert the rgba image (with alpha channel) to a mask
+    import os
+    os.system("convert "+args.filename+"_tmp.png -alpha extract "+args.filename+".png")
+    os.unlink(args.filename+"_tmp.png")
