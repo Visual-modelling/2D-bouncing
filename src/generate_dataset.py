@@ -23,6 +23,8 @@ parser.add_argument('number_of_simulations', metavar='NUM_SIMS', type=int,
                     help='Number of simulations to run')
 parser.add_argument('output_path', metavar='OUTPUT_NAME', type=str,
                     help='Path to save simulations')
+parser.add_argument("--segmentation_map", action="store_true",
+                    help="Render a segmentation map")
 args = parser.parse_args()
 
 num_timesteps_per_simulation = 100
@@ -137,6 +139,8 @@ while simulation_num < args.number_of_simulations:
         formatted_name = "0"*(len(str(args.number_of_simulations))-len(str(simulation_num)))+str(simulation_num)
         formatted_name = os.path.join(args.output_path,formatted_name)
         os.mkdir(formatted_name)
+        if args.segmentation_map:
+            os.mkdir(os.path.join(formatted_name, "mask"))
 
         # Write positions.csv file
         with open(os.path.join(formatted_name,"positions.csv"),'w') as f:
@@ -155,17 +159,28 @@ while simulation_num < args.number_of_simulations:
 
         # Render the images
         for t in timesteps:
-            filename = os.path.join(formatted_name,"frame_"+"{:03d}".format(t[0])+".png")
+            filename = "frame_"+"{:03d}".format(t[0])+".png"
             for j in range(len(t[1])):
                 base = os.path.dirname(__file__)
                 if base == "":
                     base = "./"
-                cmd = "blender -b '"+os.path.join(base, "base.blend")+"' -P "+os.path.join(base, "blend.py")+" --"
-                cmd += " -r "+str(params["radius"][j])
-                cmd += " -fg \""+ params["foreground_color"][j]+"\""
-                cmd += " "+str(t[1][j])
-                cmd += " "+str(t[2][j])
-                cmd += " "+filename[:-4]
+
+                versions = [""]
+                if args.segmentation_map:
+                    versions.append(" --segmentation_map")
+                for s in versions:
+                    cmd = "blender -b '"+os.path.join(base, "base.blend")+"' -P "+os.path.join(base, "blend.py")+" --"
+                    cmd += " -r "+str(params["radius"][j])
+                    cmd += " -fg \""+ params["foreground_color"][j]+"\""
+                    cmd += s
+                    cmd += " "+str(t[1][j])
+                    cmd += " "+str(t[2][j])
+                    cmd += " "+str(0.5)
+                    if s == "":
+                        cmd += " " + os.path.join(formatted_name, filename[:-4])
+                    else:
+                        cmd += " " + os.path.join(formatted_name, "mask", filename[:-4])
+                    os.system(cmd)
 
                 '''
                 if j == 0:
@@ -181,7 +196,6 @@ while simulation_num < args.number_of_simulations:
                 cmd += " "+str(round(t[2][j]*image_size))
                 cmd += " "+filename
                 '''
-                os.system(cmd)
 
         # Add metadata
         with open(os.path.join(formatted_name,"config.yml"),'w') as f:
@@ -190,4 +204,6 @@ while simulation_num < args.number_of_simulations:
 
         # Just for preview - make a gif
         os.system("convert -delay 20 "+formatted_name+"/*.png "+formatted_name+"/simulation.gif")
+        if args.segmentation_map:
+            os.system("convert -delay 20 "+formatted_name+"/mask/*.png "+formatted_name+"/mask/simulation.gif")
         simulation_num+=1
