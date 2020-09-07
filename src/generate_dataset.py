@@ -34,8 +34,10 @@ image_size = 64
 per_ball_parameter_space = {
     "x":[0.1*i for i in range(1,10)],
     "y":[0.1*i for i in range(1,10)],
+    "z":[0.1*i for i in range(1,10)],
     "dx":[0.1*i for i in range(-5,5)],
     "dy":[0.1*i for i in range(-5,5)],
+    "dz":[0.1*i for i in range(-5,5)],
     "radius":[0.1*i for i in range(1,4)],
     "foreground_color":['#{0:x}{0:x}{0:x}'.format(x) for x in range(15,-1,-1)],
 }
@@ -45,6 +47,7 @@ parameter_space = {
     "num_balls":[1],
 #    "gx":[0.1*i for i in range(0,5)],
 #    "gy":[0.1*i for i in range(0,5)],
+#    "gz":[0.1*i for i in range(0,5)],
     "background_color":['#{0:x}{0:x}{0:x}'.format(x) for x in range(0,16)],
 }
 
@@ -96,8 +99,10 @@ while simulation_num < args.number_of_simulations:
         # Check if too close to boundary
         if params["radius"+str(i)] > params["x"+str(i)] or \
            params["radius"+str(i)] > params["y"+str(i)] or \
+           params["radius"+str(i)] > params["z"+str(i)] or \
            params["radius"+str(i)] > (1-params["x"+str(i)]) or \
-           params["radius"+str(i)] > (1-params["y"+str(i)]):
+           params["radius"+str(i)] > (1-params["y"+str(i)]) or \
+           params["radius"+str(i)] > (1-params["z"+str(i)]):
             print("Rejecting: Too close to boundary!")
             good_simulation = False
             break
@@ -105,7 +110,7 @@ while simulation_num < args.number_of_simulations:
         # Check if too close to other balls
         good_ball = True
         for j in range(i):
-            distance_between_balls = math.sqrt((params["x"+str(i)]-params["x"+str(j)])**2 + (params["y"+str(i)] - params["y"+str(j)]) **2)
+            distance_between_balls = math.sqrt((params["x"+str(i)]-params["x"+str(j)])**2 + (params["y"+str(i)] - params["y"+str(j)]) **2 + (params["z"+str(i)] - params["z"+str(j)]) **2)
             if distance_between_balls < params["radius"+str(j)]+params["radius"+str(i)]:
                 print("Rejecting: Too close to other balls!")
                 good_ball = False
@@ -146,7 +151,8 @@ while simulation_num < args.number_of_simulations:
         with open(os.path.join(formatted_name,"positions.csv"),'w') as f:
             header = "timestep,"\
                 +",".join(["x"+str(i) for i in range(params["num_balls"])])+","\
-                +",".join(["y"+str(i) for i in range(params["num_balls"])])
+                +",".join(["y"+str(i) for i in range(params["num_balls"])])+","\
+                +",".join(["z"+str(i) for i in range(params["num_balls"])])
             f.write(header+"\n")
             for t in timesteps:
                 line = []
@@ -175,7 +181,7 @@ while simulation_num < args.number_of_simulations:
                     cmd += s
                     cmd += " "+str(t[1][j])
                     cmd += " "+str(t[2][j])
-                    cmd += " "+str(0.5)
+                    cmd += " "+str(t[3][j])
                     if s == "":
                         cmd += " " + os.path.join(formatted_name, filename[:-4])
                     else:

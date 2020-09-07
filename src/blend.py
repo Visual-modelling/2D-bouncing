@@ -25,6 +25,8 @@ parser.add_argument("X", type=float, default=0,
                     help="x position of ball")
 parser.add_argument("Y", type=float, default=0,
                     help="y position of ball")
+parser.add_argument("Z", type=float, default=0.5,
+                    help="z position of ball")
 parser.add_argument("filename", type=str, default=0,
                     help="filename of output")
 parser.add_argument("--segmentation_map", action="store_true",
@@ -91,7 +93,7 @@ scene.camera.location.x = 2.0
 scene.camera.location.y = -0.9558
 scene.camera.location.z = 1.4083
 
-bpy.ops.mesh.primitive_uv_sphere_add(location=(args.X,args.Y,0.5), radius=args.radius)
+bpy.ops.mesh.primitive_uv_sphere_add(location=(args.X,args.Y,args.Z), radius=args.radius)
 
 ball_col = makeMaterial('mat1',args.foreground_color,(1,1,1))
 setMaterial(bpy.context.object, ball_col)
