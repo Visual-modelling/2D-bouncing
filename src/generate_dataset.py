@@ -2,11 +2,7 @@
 
 '''
 Generate simulations
-===================
-
-Randomly sample from the parameter space
-'''
-
+=================== Randomly sample from the parameter space '''
 import yaml
 import time
 import os
@@ -16,6 +12,8 @@ import numpy as np
 import subprocess
 import random
 from simulate import simulate
+import operator
+from functools import reduce
 
 import argparse
 parser = argparse.ArgumentParser(description='Generate ball simulations')
@@ -44,7 +42,7 @@ per_ball_parameter_space = {
 
 # Global parameters
 parameter_space = {
-    "num_balls":[1],
+    "num_balls":[2, 3],
 #    "gx":[0.1*i for i in range(0,5)],
 #    "gy":[0.1*i for i in range(0,5)],
 #    "gz":[0.1*i for i in range(0,5)],
@@ -87,11 +85,27 @@ print("Done")
 # Render
 simulation_num = 0
 balls = []
-sampler = ParameterGrid(parameter_space)
+
+def get_env(space, idx):
+    '''Constructs the nth combination of the parameter space'''
+    keys = list(space.keys())
+    lens = [len(v) for v in space.values()]
+
+    out = {}
+    count = idx
+    for i in range(len(lens)):
+        if i < len(lens)-1:
+            val = reduce(operator.mul,[a for a in lens[i+1:]])
+            out[keys[i]] = space[keys[i]][int(count // val)]
+            count = count % val
+        else:
+            out[keys[i]] = space[keys[i]][count]
+    return out
 
 while simulation_num < args.number_of_simulations:
-    random_idx = random.randint(0, len(sampler)-1)
-    params = sampler[random_idx]
+    sampler_len = reduce(operator.mul,[len(a) for a in parameter_space.values()])
+    random_idx = int(random.random() *(sampler_len-1))
+    params = get_env(parameter_space, random_idx)
 
     good_simulation = True
     for i in range(params["num_balls"]):
@@ -166,27 +180,28 @@ while simulation_num < args.number_of_simulations:
         # Render the images
         for t in timesteps:
             filename = "frame_"+"{:03d}".format(t[0])+".png"
-            for j in range(len(t[1])):
-                base = os.path.dirname(__file__)
-                if base == "":
-                    base = "./"
+            base = os.path.dirname(__file__)
+            if base == "":
+                base = "./"
 
-                versions = [""]
-                if args.segmentation_map:
-                    versions.append(" --segmentation_map")
-                for s in versions:
-                    cmd = "blender -b '"+os.path.join(base, "base.blend")+"' -P "+os.path.join(base, "blend.py")+" --"
-                    cmd += " -r "+str(params["radius"][j])
-                    cmd += " -fg \""+ params["foreground_color"][j]+"\""
-                    cmd += s
-                    cmd += " "+str(t[1][j])
-                    cmd += " "+str(t[2][j])
-                    cmd += " "+str(t[3][j])
-                    if s == "":
-                        cmd += " " + os.path.join(formatted_name, filename[:-4])
-                    else:
-                        cmd += " " + os.path.join(formatted_name, "mask", filename[:-4])
-                    os.system(cmd)
+            versions = [""]
+            if args.segmentation_map:
+                versions.append(" --segmentation_map")
+            for s in versions:
+                cmd = "blender -b '"+os.path.join(base, "base.blend")+"' -P "+os.path.join(base, "blend.py")+" --"
+                cmd += " -r "+" ".join([str(v) for v in params["radius"]])
+                cmd += " -fg \""+ "\" \"".join(params["foreground_color"])+"\""
+                cmd += s
+                cmd += " -X "+" ".join([str(v) for v in t[1]])
+                cmd += " -Y "+" ".join([str(v) for v in t[2]])
+                cmd += " -Z "+" ".join([str(v) for v in t[3]])
+                # cmd += " -Y"+str(t[2][j])
+                # cmd += " -Z"+str(t[3][j])
+                if s == "":
+                    cmd += " -filename " + os.path.join(formatted_name, filename[:-4])
+                else:
+                    cmd += " -filename " + os.path.join(formatted_name, "mask", filename[:-4])
+                os.system(cmd)
 
                 '''
                 if j == 0:
