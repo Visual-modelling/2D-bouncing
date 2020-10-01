@@ -1,7 +1,7 @@
 # 2D-bouncing [![](https://github.com/Visual-modelling/2D-bouncing/workflows/2D-bouncing/badge.svg)](https://github.com/Visual-modelling/2D-bouncing/actions)
 Simple 2D dataset of bouncing balls
 
-![](example.gif)
+![](https://user-images.githubusercontent.com/13795113/94870745-47907680-0440-11eb-93f9-7d162a24cca0.gif)
 
 ## Requirements
 
