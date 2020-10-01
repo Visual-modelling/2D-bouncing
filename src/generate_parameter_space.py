@@ -22,7 +22,7 @@ import argparse
 parser = argparse.ArgumentParser(description='Generate ball simulations')
 parser.add_argument('output_path', metavar='OUTPUT_NAME', type=str,
                     help='Path to save simulations')
-parser.add_argument("--num_splits", type=int,default=1,
+parser.add_argument("num_splits", type=int,
                     help="Number of computers the space is to be split over")
 parser.add_argument('number_of_simulations', metavar='NUM_SIMS', type=int,
                     help='Number of simulations to render per computer')
@@ -153,6 +153,7 @@ while simulation_num < args.number_of_simulations:
 
     if good_simulation:
         try:
+            params["simulation_num"] = "0"*(len(str(args.number_of_simulations))-len(str(simulation_num)))+str(simulation_num)
             files[split_idx].write(json.dumps(params)+"\n")
             split_idx = (split_idx+1)%args.num_splits
             simulation_num+=1

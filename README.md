@@ -5,10 +5,12 @@ Simple 2D dataset of bouncing balls
 
 ## Requirements
 
-Install the python dependancies (`pip install -r requirements.txt`) and [imagemagick](https://www.archlinux.org/packages/?name=imagemagick)
+Install the python dependancies (`pip install -r requirements.txt`) and [imagemagick](https://www.archlinux.org/packages/?name=imagemagick).
+
+Additionally, for the 3d version install blender.
 
 ## Usage
-
+### 2D
 To generate a dataset of N videos, run:
 
 `python src/generate_dataset.py N my_dataset_name`
@@ -31,6 +33,29 @@ This will create a directory `my_dataset_name` with a directory per simulation:
 ```
 
 Each sequence contains a `config.yaml` file recording the simulation parameters.
+
+
+# 3D
+
+The 3D dataset takes much longer than the 2D one to render so the parameter space can be divided between multiple machines. First generate lists of parameters for each node to render:
+```
+python src/generate_parameter_space.py DATASET_NAME NUM_MACHINES SIZE_OF_DATASET
+```
+This will create a directory with the files:
+```
+.
+└── DATASET_NAME
+    ├── config.yaml
+    ├── parameter_space0.yaml
+    ├── ...
+    └── parameter_spaceN.yaml
+```
+Then on each machine run the following to render the dataset:
+```
+python src/generate_dataset.py DATASET_NAME/parameter_spaceN.yaml [--segmentation_map]
+```
+This will add the simulations to the `DATASET_NAME` directory. The contents of each machine's `DATASET_NAME` dir can be safely combined to form the full dataset.
+
 
 ## Components
 Made of 3 components:
@@ -63,3 +88,4 @@ There are also optional utility scripts to apply random obscuring objects (`rand
     - [ ] Add random ball jitter
     - [x] Add gausian blur
     - [x] Add multiple balls
+    - [x] Add segmentation mask
