@@ -15,19 +15,19 @@ class ArgumentParserForBlender(argparse.ArgumentParser):
         return super().parse_args(args=self._get_argv_after_doubledash())
 
 parser = ArgumentParserForBlender()
-parser.add_argument("-r", "--radius",
+parser.add_argument("-r", "--radius", nargs="+",
                     type=float,
                     help="raidus of ball")
-parser.add_argument("-fg", "--foreground-color",
+parser.add_argument("-fg", "--foreground-color", nargs="+",
                     type=str,
                     help="Hex code of the ball color")
-parser.add_argument("X", type=float, default=0,
+parser.add_argument("-X", type=float, nargs="+",
                     help="x position of ball")
-parser.add_argument("Y", type=float, default=0,
+parser.add_argument("-Y", type=float, nargs="+",
                     help="y position of ball")
-parser.add_argument("Z", type=float, default=0.5,
+parser.add_argument("-Z", type=float, nargs="+",
                     help="z position of ball")
-parser.add_argument("filename", type=str, default=0,
+parser.add_argument("-filename", type=str, default=0,
                     help="filename of output")
 parser.add_argument("--segmentation_map", action="store_true",
                     help="Render a segmentation map")
@@ -93,10 +93,13 @@ scene.camera.location.x = 2.0
 scene.camera.location.y = -0.9558
 scene.camera.location.z = 1.4083
 
-bpy.ops.mesh.primitive_uv_sphere_add(location=(args.X,args.Y,args.Z), radius=args.radius)
+assert len(args.X) == len(args.Y) == len(args.Z)
 
-ball_col = makeMaterial('mat1',args.foreground_color,(1,1,1))
-setMaterial(bpy.context.object, ball_col)
+for i in range(len(args.X)):
+    bpy.ops.mesh.primitive_uv_sphere_add(location=(args.X[i],args.Y[i],args.Z[i]), radius=args.radius[i])
+
+    ball_col = makeMaterial('mat'+str(i),args.foreground_color[i],(1,1,1))
+    setMaterial(bpy.context.object, ball_col)
 
 # Enable GPUs
 bpy.context.scene.cycles.device = 'GPU'
