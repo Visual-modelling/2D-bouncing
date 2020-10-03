@@ -21,13 +21,13 @@ parser.add_argument("-r", "--radius",
 parser.add_argument("-fg", "--foreground-color",
                     type=str,
                     help="Hex code of the ball color")
-parser.add_argument("X", type=float, default=0,
+parser.add_argument("-X", type=float, default=0,
                     help="x position of ball")
-parser.add_argument("Y", type=float, default=0,
+parser.add_argument("-Y", type=float, default=0,
                     help="y position of ball")
-parser.add_argument("Z", type=float, default=0.5,
+parser.add_argument("-Z", type=float, default=0.5,
                     help="z position of ball")
-parser.add_argument("filename", type=str, default=0,
+parser.add_argument("-filename", type=str, default=0,
                     help="filename of output")
 parser.add_argument("--segmentation_map", action="store_true",
                     help="Render a segmentation map")
