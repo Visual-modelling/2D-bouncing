@@ -17,6 +17,7 @@ def simulate(num_time_steps,radius=[0.1],x=[0.5], y=[0.5], dx=[0.0], dy=[0.0], g
 
     simulation_output = []
     t = 0
+    bounces = 0
     while len(simulation_output) < num_time_steps:
         t += 1
         for i in range(len(x)):
@@ -39,6 +40,7 @@ def simulate(num_time_steps,radius=[0.1],x=[0.5], y=[0.5], dx=[0.0], dy=[0.0], g
                 if i != j:
                     distance_between_balls = math.sqrt( (x[i]-x[j])**2 + (y[i]-y[j]) **2)
                     if distance_between_balls < radius[i] + radius[j]: # if collision
+                        bounces += 1
                         dxi_temp = dx[i]
                         dyi_temp = dy[i]
                         dx[i] = (dx[i] * ( 1 - 1) + ( 2 * 1 * dx[j])) / (1 + 1)
@@ -48,21 +50,25 @@ def simulate(num_time_steps,radius=[0.1],x=[0.5], y=[0.5], dx=[0.0], dy=[0.0], g
 
             # Wall collisions
             if (x[i] <= radius[i]):
+                bounces += 1
                 x[i] = radius[i]
                 dx[i] *= -1
             elif (x[i] >= 1-radius[i]):
+                bounces += 1
                 x[i] = 1-radius[i]
                 dx[i] *= -1
             if (y[i] <= radius[i]):
+                bounces += 1
                 y[i] = radius[i]
                 dy[i] *= -1
             elif (y[i] >= 1-radius[i]):
+                bounces += 1
                 y[i] = 1-radius[i]
                 dy[i] *= -1
 
         if t % output_every == 0:
             simulation_output.append((len(simulation_output),x.copy(),y.copy()))
-    return simulation_output
+    return simulation_output, bounces
 
 if __name__ == "__main__":
 
@@ -97,7 +103,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Create a test dataset
-    output = simulate(100,args.radius,args.x,args.y,args.dx,args.dy,args.gravity_x,args.gravity_y)
+    output = simulate(100,args.radius,args.x,args.y,args.dx,args.dy,args.gravity_x,args.gravity_y)[0]
     for t,o in enumerate(output):
         print("\t".join([str(v) for v in o]))
 
