@@ -17,7 +17,7 @@ def simulate(num_time_steps,radius=[0.1],x=[0.5], y=[0.5], dx=[0.0], dy=[0.0], g
 
     simulation_output = []
     t = 0
-    bounces = 0
+    bounces = {"wall": 0, "ball-ball": 0}
     while len(simulation_output) < num_time_steps:
         t += 1
         for i in range(len(x)):
@@ -40,7 +40,7 @@ def simulate(num_time_steps,radius=[0.1],x=[0.5], y=[0.5], dx=[0.0], dy=[0.0], g
                 if i != j:
                     distance_between_balls = math.sqrt( (x[i]-x[j])**2 + (y[i]-y[j]) **2)
                     if distance_between_balls < radius[i] + radius[j]: # if collision
-                        bounces += 1
+                        bounces["ball-ball"] += 1
                         dxi_temp = dx[i]
                         dyi_temp = dy[i]
                         dx[i] = (dx[i] * ( 1 - 1) + ( 2 * 1 * dx[j])) / (1 + 1)
@@ -50,19 +50,19 @@ def simulate(num_time_steps,radius=[0.1],x=[0.5], y=[0.5], dx=[0.0], dy=[0.0], g
 
             # Wall collisions
             if (x[i] <= radius[i]):
-                bounces += 1
+                bounces["wall"] += 1
                 x[i] = radius[i]
                 dx[i] *= -1
             elif (x[i] >= 1-radius[i]):
-                bounces += 1
+                bounces["wall"] += 1
                 x[i] = 1-radius[i]
                 dx[i] *= -1
             if (y[i] <= radius[i]):
-                bounces += 1
+                bounces["wall"] += 1
                 y[i] = radius[i]
                 dy[i] *= -1
             elif (y[i] >= 1-radius[i]):
-                bounces += 1
+                bounces["wall"] += 1
                 y[i] = 1-radius[i]
                 dy[i] *= -1
 
