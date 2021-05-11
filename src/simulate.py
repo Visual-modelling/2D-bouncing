@@ -14,6 +14,7 @@ def simulate(num_time_steps,radius=[0.1],x=[0.5], y=[0.5], z=[0.5], dx=[0.0], dy
 
     simulation_output = []
     t = 0
+    bounces = {"wall": 0, "ball-ball": 0}
     while len(simulation_output) < num_time_steps:
         t += 1
         for i in range(len(x)):
@@ -39,6 +40,7 @@ def simulate(num_time_steps,radius=[0.1],x=[0.5], y=[0.5], z=[0.5], dx=[0.0], dy
                 if i != j:
                     distance_between_balls = math.sqrt( (x[i]-x[j])**2 + (y[i]-y[j]) **2 + (z[i]-z[j]) **2)
                     if distance_between_balls < radius[i] + radius[j]: # if collision
+                        bounces["ball-ball"] += 1
                         dxi_temp = dx[i]
                         dyi_temp = dy[i]
                         dzi_temp = dz[i]
@@ -53,27 +55,33 @@ def simulate(num_time_steps,radius=[0.1],x=[0.5], y=[0.5], z=[0.5], dx=[0.0], dy
 
             # Wall collisions
             if (x[i] <= radius[i]):
+                bounces["wall"] += 1
                 x[i] = radius[i]
                 dx[i] *= -1
             elif (x[i] >= 1-radius[i]):
+                bounces["wall"] += 1
                 x[i] = 1-radius[i]
                 dx[i] *= -1
             if (y[i] <= radius[i]):
+                bounces["wall"] += 1
                 y[i] = radius[i]
                 dy[i] *= -1
             elif (y[i] >= 1-radius[i]):
+                bounces["wall"] += 1
                 y[i] = 1-radius[i]
                 dy[i] *= -1
             if (z[i] <= radius[i]):
+                bounces["wall"] += 1
                 z[i] = radius[i]
                 dz[i] *= -1
             elif (z[i] >= 1-radius[i]):
+                bounces["wall"] += 1
                 z[i] = 1-radius[i]
                 dz[i] *= -1
 
         if t % output_every == 0:
             simulation_output.append((len(simulation_output),x.copy(),y.copy(),z.copy()))
-    return simulation_output
+    return simulation_output, bounces
 
 if __name__ == "__main__":
 
@@ -117,8 +125,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Create a test dataset
-    output = simulate(100,args.radius,args.x,args.y,args.z,args.dx,args.dy,args.dz,args.gravity_x,args.gravity_y,args.gravity_z)
-    for t,o in enumerate(output):
+    output, _ = simulate(100, args.radius, args.x, args.y, args.z, args.dx, args.dy, args.dz, args.gravity_x, args.gravity_y, args.gravity_z)
+    for t, o in enumerate(output):
         print("\t".join([str(v) for v in o]))
 
 #         filename = "test/frame_"+"{:02d}".format(t)+".png"

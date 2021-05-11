@@ -35,7 +35,7 @@ for params in open(args.param_space_file):
     print("Simulation",simulation_num,params)
     print()
     print()
-    timesteps = simulate(num_timesteps_per_simulation,**params)
+    timesteps, bounces = simulate(num_timesteps_per_simulation,**params)
 
     # Make directory
     formatted_name = simulation_num
@@ -89,6 +89,7 @@ for params in open(args.param_space_file):
     # Add metadata
     with open(os.path.join(formatted_name,"config.yml"),'w') as f:
         params["date"] = time.time()
+        params["bounces"] = bounces
         yaml.dump(params,f)
 
     # Just for preview - make a gif
